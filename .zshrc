@@ -41,4 +41,4 @@ for file in "${USR_FILES[@]}"; do
 done
 
 # Modify prompt
-PS1="%F{magenta}[bryce %1~]%f %# "
+PS1="%F{magenta}[bryce@%m %1~]%f %# "
