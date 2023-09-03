@@ -1,17 +1,17 @@
 #!/bin/zsh -x
 
 # Get the current directory
-FILES_DIR=$(pwd)
+ZSH_DIR=$(pwd)
 
 # Make sure we're in the right directory
-if [[ ! "$(basename $FILES_DIR)" == ".zsh" ]]; then
-    echo "You must run this script from the .zsh/ directory"
+if [[ ! "$ZSH_DIR" == "~/.zsh" ]]; then
+    echo "Please make sure this directory is located at ~/.zsh, and that this script was ran from that directory."
     exit 1
 fi
 
 # Create a history file and seesion folder if they don't exist
-ZSH_HISTORY=$FILES_DIR/.zsh_history
-ZSH_SESSIONS=$FILES_DIR/.zsh_sessions/
+ZSH_HISTORY=$ZSH_DIR/.zsh_history
+ZSH_SESSIONS=$ZSH_DIR/.zsh_sessions/
 
 if [ ! -f $ZSH_HISTORY ]; then
     touch $ZSH_HISTORY
@@ -24,8 +24,8 @@ fi
 
 # Get the names of all files in the home_files directory
 declare -a FILES_TO_LINK=(
-    $FILES_DIR/.zshrc
-    $FILES_DIR/.zprofile
+    $ZSH_DIR/.zshrc
+    $ZSH_DIR/.zprofile
     $ZSH_HISTORY
     $ZSH_SESSIONS
 )

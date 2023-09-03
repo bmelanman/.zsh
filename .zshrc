@@ -3,10 +3,14 @@ ZSH_ROOT=~/.zsh
 THEMES=~/.zsh/zplug/repos/chriskempson/base16-shell/scripts
 
 #################### ZPlug ####################
+# Set ZPlug home
+export ZPLUG_HOME=~/.zsh/zplug
 # Init ZPlug
 source ~/.zsh/zplug/init.zsh
 
 ##### ZPlug Plugins #####
+# Let ZPlug manage itself
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 # Base16-Shell Color Theme
 zplug chriskempson/base16-shell, from:github, as:theme
 
