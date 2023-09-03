@@ -1,0 +1,8 @@
+
+# Tensor Flow libraries
+export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/lib/tensorflow/lib # For both Linux and Mac OS X
+export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/usr/local/lib/tensorflow/lib # For Mac OS X only
+
+# PCap Libraries
+export PATH="$PATH:/opt/homebrew/opt/libpcap/bin"
+

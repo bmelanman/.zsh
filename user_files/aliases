@@ -1,0 +1,73 @@
+#!/bin/zsh
+
+################### Personal Aliases ###################
+
+# Modify prompt colors
+PS1="%F{magenta}[bryce %1~]%f %# "
+
+# Shell command aliases
+alias la='ls -laFh'
+alias rewq='clear'
+alias time='/usr/bin/time'
+
+# True clear screen command
+alias clearTerminalBuffer="printf '\033[2J\033[3J\033[1;1H'"
+alias cb=clearTerminalBuffer
+
+# Neovim shortcuts
+alias vi=nvim
+alias vim=nvim
+
+# Mac specific aliases
+if [[ "$OSTYPE" == "darwin"* ]]; then
+
+    # Ubuntu Multipass shortcuts
+    alias mp='multipass'
+    alias mps='multipass shell'
+
+else
+
+    # Linux specific aliases
+    alias apt-install='sudo apt install -y'
+fi
+
+#################### School Aliases ####################
+
+# Function for logging into the CalPoly Unix servers
+cp_login() {
+
+    # Default server is unix4, as it the lowest chance of being busy
+    local SRV='4'
+
+    # Check if user specified unix server
+    if [[ "$#" -ge 1 ]]; then
+
+        # Check args
+        if [[ $1 -eq "-s" ]]; then
+            SRV="$2"
+        else
+            SRV="$1"
+        fi
+
+        # Make sure the entry is valid and in the range 1 - 5 (inclusive)
+        if [[ ! $SRV =~ ^-?[0-9]+$ ]] || [[ $SRV -lt 1 ]] || [[ $SRV -gt 5 ]]; then
+            echo "Fatal: invalid server selection"
+            echo "usage: $0 [-s [1-5]]" >&2
+            return 1
+        fi
+    fi
+
+    # Generate the ssh command
+    local SSH_CMD="ssh bmelande@unix$SRV.csc.calpoly.edu"
+
+    # Pompt
+    echo "Logging into unix$SRV.csc.calpoly.edu..."
+    echo $SSH_CMD
+
+    # Execute the command
+    eval $SSH_CMD
+
+}
+
+# Auto login to unix4
+alias fdsa='cp_login -s 4'
