@@ -18,6 +18,10 @@ alias cb=clearTerminalBuffer
 alias vi=nvim
 alias vim=nvim
 
+# Source zshrc
+alias szsh='source ~/.zshrc'
+alias ezsh='source ~/.zsh/user_files/aliases'
+
 # Mac specific aliases
 if [[ "$OSTYPE" == "darwin"* ]]; then
 
@@ -31,7 +35,67 @@ else
     alias apt-install='sudo apt install -y'
 fi
 
+# Add words to cspell dictionary
+DICT_PATH=~/.config/cspell/words.txt
+addword() {
+
+	if [[ $# -lt 1 ]]; then
+		return 1
+	fi
+
+	unset INPUT_FILE
+
+	while [[ $# -gt 0 ]]; do
+		
+		ARG=$1
+		shift
+
+		case $ARG in 
+		"-h")
+			echo "Usage: $0 [-h] [-f <file>] -- [words...]"
+			echo "Saves unknown words to $DICT_PATH"
+			echo ""
+			return 0
+			;;
+		"-f")
+			INPUT_FILE=$1
+			shift;
+			;;
+		"--")
+			break;
+			;;
+		esac
+	done
+
+	declare -a WORDS
+	WORDS+=($@)
+
+	if [[ -n $INPUT_FILE ]];then 
+		if [[ -f $INPUT_FILE ]]; then
+			WORDS+=($(cspell --words-only --unique --quiet $INPUT_FILE))
+		else
+			echo "$INPUT_FILE not found!"
+		fi
+	fi
+	
+	for WORD in ${WORDS[@]}; do
+		echo "$WORD" >>$DICT_PATH
+	done
+
+	# Remove duplicates
+	sort --ignore-case -u -o $DICT_PATH <$DICT_PATH
+}
+
 #################### School Aliases ####################
+
+start_vpn() {
+
+    launchctl load -wF /Library/LaunchAgents/com.paloaltonetworks.gp.pangpa.plist && /Applications/GlobalProtect.app/Contents/MacOS/GlobalProtect &
+
+	if [[ $? -ne 0 ]]; then
+		exit 1
+	fi
+}
 
 # Function for logging into the CalPoly Unix servers
 cp_login() {
@@ -71,3 +135,33 @@ cp_login() {
 
 # Auto login to unix4
 alias fdsa='cp_login -s 4'
+
+# Function for starting the CSC453_Arm Virtual Machine and automattically
+# connecting to it
+vm() {
+
+    vm_error() {
+        echo "An error occurred while running $1!"
+        echo "Please investigate and try again, exiting..."
+
+        exit 1
+    }
+
+    local VM_NAME="CSC453_Arm_VM"
+
+    echo "Starting the VM..."
+    utmctl start $VM_NAME
+
+    if [[ $? -ne 0 ]]; then
+        vm_error "utmclt start"
+    fi
+
+    echo "Connecting to the VM..."
+    utmctl start $VM_NAME
+
+    if [[ $? -ne 0 ]]; then
+        vm_error "utmclt start"
+    fi
+}
+
+

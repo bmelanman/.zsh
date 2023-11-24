@@ -6,3 +6,10 @@ export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/usr/local/lib/tensorflow/lib # For 
 # PCap Libraries
 export PATH="$PATH:/opt/homebrew/opt/libpcap/bin"
 
+# Homebrew location
+HOMEBREW_PREFIX=/opt/homebrew
+
+# Add GNUbin to PATH
+PATH="$HOMEBREW_PREFIX/opt/make/libexec/gnubin:$PATH"
+# Replace make with gmake
+alias make='gmake'
